@@ -42,7 +42,7 @@ const TransactionSigning = (props: Props) => {
       );
     }
 
-    const keys =await getMultisigAccount(address, client)
+    const keys = await getMultisigAccount(address, client);
 
     return keys;
   };
@@ -114,12 +114,11 @@ const TransactionSigning = (props: Props) => {
 
     const pubkey = result[0];
 
-    let found = (pubkey.value.pubkeys.length > 0) ? false:true;
+    let found = pubkey.value.pubkeys.length > 0 ? false : true;
 
-    for (const statekeys of pubkey.value.pubkeys){
-
+    for (const statekeys of pubkey.value.pubkeys) {
       console.log(statekeys);
-      if (statekeys.value === toBase64(signerAccounts[0].pubkey)){
+      if (statekeys.value === toBase64(signerAccounts[0].pubkey)) {
         console.log("found");
         found = true;
       }
