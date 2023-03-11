@@ -125,43 +125,45 @@ const TransactionSigning = (props: Props) => {
     }
     if (!found) {
       setSigError("Signing with wrong wallet");
-    }
-    assert(found, "Signing with wrong wallet");
-
-    const signingClient = await SigningStargateClient.offline(offlineSigner);
-
-    const signerData = {
-      accountNumber: props.tx.accountNumber,
-      sequence: props.tx.sequence,
-      chainId: state.chain.chainId,
-    };
-
-    const { bodyBytes, signatures } = await signingClient.sign(
-      signerAddress,
-      props.tx.msgs,
-      props.tx.fee,
-      props.tx.memo,
-      signerData,
-    );
-
-    // check existing signatures
-    const bases64EncodedSignature = toBase64(signatures[0]);
-    const bases64EncodedBodyBytes = toBase64(bodyBytes);
-    const prevSigMatch = props.signatures.findIndex(
-      (signature) => signature.signature === bases64EncodedSignature,
-    );
-
-    if (prevSigMatch > -1) {
-      setSigError("This account has already signed.");
     } else {
-      const signature = {
-        bodyBytes: bases64EncodedBodyBytes,
-        signature: bases64EncodedSignature,
-        address: signerAddress,
+      const signingClient = await SigningStargateClient.offline(offlineSigner);
+
+      const signerData = {
+        accountNumber: props.tx.accountNumber,
+        sequence: props.tx.sequence,
+        chainId: state.chain.chainId,
       };
-      const _res = await axios.post(`/api/transaction/${props.transactionID}/signature`, signature);
-      props.addSignature(signature);
-      setHasSigned(true);
+
+      const { bodyBytes, signatures } = await signingClient.sign(
+        signerAddress,
+        props.tx.msgs,
+        props.tx.fee,
+        props.tx.memo,
+        signerData,
+      );
+
+      // check existing signatures
+      const bases64EncodedSignature = toBase64(signatures[0]);
+      const bases64EncodedBodyBytes = toBase64(bodyBytes);
+      const prevSigMatch = props.signatures.findIndex(
+        (signature) => signature.signature === bases64EncodedSignature,
+      );
+
+      if (prevSigMatch > -1) {
+        setSigError("This account has already signed.");
+      } else {
+        const signature = {
+          bodyBytes: bases64EncodedBodyBytes,
+          signature: bases64EncodedSignature,
+          address: signerAddress,
+        };
+        const _res = await axios.post(
+          `/api/transaction/${props.transactionID}/signature`,
+          signature,
+        );
+        props.addSignature(signature);
+        setHasSigned(true);
+      }
     }
   };
 
