@@ -27,6 +27,7 @@ const TransactionForm = (props: Props) => {
   const [gasPrice, _setGasPrice] = useState(state.chain.gasPrice);
   const [_processing, setProcessing] = useState(false);
   const [addressError, setAddressError] = useState("");
+  const [sequence, setSequence] = useState(props.accountOnChain?.sequence);
 
 
   const createTransaction = (txToAddress: string, txAmount: string, txGas: number) => {
@@ -55,7 +56,7 @@ const TransactionForm = (props: Props) => {
     return {
       multiSigAddress: props.address,
       accountNumber: accountOnChain.accountNumber,
-      sequence: accountOnChain.sequence,
+      sequence: sequence,
       chainId: state.chain.chainId,
       msgs: [msg],
       fee: fee,
@@ -128,6 +129,15 @@ const TransactionForm = (props: Props) => {
           type="text"
           value={memo}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMemo(e.target.value)}
+        />
+      </div>
+      <div className="form-item">
+        <Input
+          label="Sequence"
+          name="sequence"
+          type="number"
+          value={sequence}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSequence(parseInt(e.target.value, 10))}
         />
       </div>
       <Button label="Create Transaction" onClick={handleCreate} />
