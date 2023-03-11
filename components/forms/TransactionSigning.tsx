@@ -123,6 +123,9 @@ const TransactionSigning = (props: Props) => {
         found = true;
       }
     }
+    if (found) {
+      setSigError("Signing with wrong wallet");
+    }
     assert(found, "Signing with wrong wallet");
 
     const signingClient = await SigningStargateClient.offline(offlineSigner);
