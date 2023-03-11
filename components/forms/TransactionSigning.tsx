@@ -203,7 +203,7 @@ const TransactionSigning = (props: Props) => {
       {sigError && (
         <StackableContainer lessPadding lessRadius lessMargin>
           <div className="signature-error">
-            <p>This account has already signed this transaction.</p>
+            <p>${sigError}</p>
           </div>
         </StackableContainer>
       )}
