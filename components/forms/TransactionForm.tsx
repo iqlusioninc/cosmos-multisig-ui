@@ -137,7 +137,8 @@ const TransactionForm = (props: Props) => {
           name="sequence"
           type="number"
           value={sequence}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSequence(parseInt(e.target.value, 10))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => 
+            setSequence(parseInt(e.target.value, 10))}
         />
       </div>
       <Button label="Create Transaction" onClick={handleCreate} />
